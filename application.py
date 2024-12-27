@@ -52,6 +52,20 @@ ERROR_404_HTML = """
 </html>
 """
 
+ERROR_500_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>500 Internal Server Error</title>
+</head>
+<body>
+  <h1>500 Internal Server Error</h1>
+  <p>Something went wrong while processing your request. Please try again later.</p>
+</body>
+</html>
+"""
+
 # Response Helpers
 def generate_response(status, body, content_type='text/html'):
     """Generate an HTTP response."""
@@ -80,7 +94,17 @@ def application(environ, start_response):
                 task_name = environ.get('HTTP_X_AWS_SQSD_TASKNAME', 'Unknown')
                 scheduled_at = environ.get('HTTP_X_AWS_SQSD_SCHEDULED_AT', 'Unknown')
                 logger.info("Scheduled task: %s at %s", task_name, scheduled_at)
-                return generate_response('200 OK', "")
+
+                # Example of handling different tasks
+                if task_name == 'task1':
+                    logger.info("Executing task1...")
+                    # Add the task-specific logic here (e.g., background processing)
+                    response_body = f"Task {task_name} processed successfully."
+                else:
+                    logger.warning("Unknown task: %s", task_name)
+                    response_body = f"Unknown task: {task_name}"
+
+                return generate_response('200 OK', response_body)
             else:
                 logger.warning("Unhandled POST path: %s", path)
                 return generate_response('404 Not Found', ERROR_404_HTML)
@@ -96,7 +120,7 @@ def application(environ, start_response):
 
     except Exception as e:
         logger.error("Unhandled exception: %s", str(e))
-        return generate_response('500 Internal Server Error', "<h1>500 Internal Server Error</h1>")
+        return generate_response('500 Internal Server Error', ERROR_500_HTML)
 
     finally:
         logger.info("Request processing completed.")
