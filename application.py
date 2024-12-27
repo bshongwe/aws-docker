@@ -104,6 +104,7 @@ def application(environ, start_response):
                     logger.info("Executing task1...")
                     # Add the task-specific logic here (e.g., background processing)
                     response_body = f"Task {task_name} processed successfully."
+                    logger.info("Task1 completed successfully")
                 else:
                     logger.warning("Unknown task: %s", task_name)
                     response_body = f"Unknown task: {task_name}"
