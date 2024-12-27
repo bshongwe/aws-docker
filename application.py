@@ -1,8 +1,12 @@
+from dotenv import load_dotenv
 import logging
 import logging.handlers
 import os
 from wsgiref.simple_server import make_server, WSGIServer
 from socketserver import ThreadingMixIn
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configuration
 LOG_FILE = os.getenv('LOG_FILE', '/tmp/sample-app/sample-app.log')
