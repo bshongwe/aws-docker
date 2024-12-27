@@ -2,6 +2,26 @@
   "AWSEBDockerrunVersion": "1",
   "Logging": "/tmp/sample-app",
   "Image": {
-  	"Update": "false"
-  }
+    "Update": "false"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 8000,
+      "HostPort": 8000
+    }
+  ],
+  "Environment": [
+    {
+      "Name": "LOG_FILE",
+      "Value": "/tmp/sample-app/sample-app.log"
+    },
+    {
+      "Name": "PORT",
+      "Value": "8000"
+    },
+    {
+      "Name": "MAX_LOG_SIZE",
+      "Value": "1048576"
+    }
+  ]
 }
